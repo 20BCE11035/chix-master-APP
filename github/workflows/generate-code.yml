@@ -1,0 +1,20 @@
+name: generate-code
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: "0 10 * * *"
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./codegen/generate.sh
+      - uses: EndBug/add-and-commit@1bad3abcf0d6ec49a5857d124b0bfb52dc7bb081
+        with:
+          message: "chore(gen): codegen changes"
+          commit: "--signoff"
+          pathspec_error_handling: "ignore"
+          add: "*.go"
